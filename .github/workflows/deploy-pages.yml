@@ -1,0 +1,33 @@
+name: Build and Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main   # or whichever branch you use
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # If your project needs a build step, run it here:
+      # - name: Build
+      #   run: |
+      #     npm install
+      #     npm run build
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./   # change to the directory with your built static files
+
+  deploy:
+    needs: build-deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
